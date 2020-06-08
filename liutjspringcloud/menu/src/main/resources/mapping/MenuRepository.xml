@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liutongjun.repository.MenuRepository">
+    
+    <resultMap id="menuMap" type="Menu">
+        <id column="id" property="id"></id>
+        <id column="name" property="name"></id>
+        <id column="price" property="price"></id>
+        <id column="flavor" property="flavor"></id>
+        <association property="type" select="com.liutongjun.repository.TypeRepository.findById" column="tid"></association>
+    </resultMap>
+    
+    <select id="findAll" resultMap="menuMap">
+        select * from t_menu limit #{param1},#{param2}
+    </select>
+    <select id="count" resultType="int">
+        select count(id) from t_menu
+    </select>
+    <select id="findById" parameterType="long" resultMap="menuMap">
+        select * from t_menu where id = #{id}
+    </select>
+    <insert id="save" parameterType="Menu">
+        insert into t_menu(name,price,flavor,tid) values(#{name},#{price},#{flavor},#{type.id})
+    </insert>
+    <update id="update" parameterType="Menu">
+        update t_menu set name = #{name},price = #{price},flavor = #{flavor},tid = #{type.id}
+        where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="long">
+        delete from t_menu where id = #{id}
+    </delete>
+</mapper>
